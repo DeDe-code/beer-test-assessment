@@ -57,7 +57,6 @@ const beers = {
 };
 
 const rootElement = document.querySelector("#root");
-const cardWrapper = document.querySelector(".wrapper");
 const headerComponent = () => {
   return `
   <header>
@@ -68,32 +67,34 @@ const headerComponent = () => {
   </header>
   `;
 };
-
-const cardComponent = (index, title, sub, text) => {
-  return `
-  <article class="card">
-    <div class="number-container">${index}</div>
-    <h3 class="card-title">${title}</h3>
-    <div class="line"></div>
-    <div class="card-content">
-      <p class="sub">${sub}</p>
-      <p class="text">${text}</p>
-    </div>
-    <button type="button">
-      ${beers.button} 
-      <span class="material-symbols-outlined btn-arrow">
-        arrow_forward
-      </span> 
-      </button>
-  </article>
-  `;
-};
-
-beers.cards.forEach((beer, index) => {
-  cardWrapper.insertAdjacentHTML(
-    "beforeend",
-    cardComponent(index + 1, beer.title, beer.sub, beer.text)
-  );
-});
-
 rootElement.insertAdjacentHTML("afterbegin", headerComponent());
+
+rootElement.insertAdjacentHTML(
+  "beforeend",
+  `
+<section class="wrapper">
+${beers.cards
+  .map((beer, index) => {
+    const { title, sub, text } = beer;
+    return `
+    <article class="card">
+      <div class="number-container">${index + 1}</div>
+      <h3 class="card-title">${title}</h3>
+      <div class="line"></div>
+      <div class="card-content">
+        <p class="sub">${sub}</p>
+        <p class="text">${text}</p>
+      </div>
+      <button type="button">
+        ${beers.button} 
+        <span class="material-symbols-outlined btn-arrow">
+          arrow_forward
+        </span> 
+        </button>
+      </article>
+  `;
+  })
+  .join("")}
+</section>
+`
+);
